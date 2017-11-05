@@ -7,6 +7,8 @@ const blanksEl = document.querySelector("#blanks"),
   statusEl = document.querySelector("#status"),
   manEl = document.querySelector("#man");
 
+const spacer = "&nbsp;&nbsp;";
+
 const asciiHangman = [
   "<p>&nbsp;&nbsp;&nbsp;O</p>",
   "<p>&nbsp;&nbsp;-",
@@ -32,6 +34,14 @@ const Game = {
     {
       word: "Brendan Eich",
       hint: "Person"
+    },
+    {
+      word: "Honda",
+      hint: "Brand"
+    },
+    {
+      word: "Big Bend",
+      hint: "Place"
     }
   ],
 
@@ -42,7 +52,7 @@ const Game = {
   misses: [],
   blanks: [],
 
-  pickRandomWord: function() {
+  startRound: function() {
     // Pick a random word from the gameWords array and set value as word's object
     this.currentWord = this.gameWords[
       Math.floor(Math.random() * this.gameWords.length)
@@ -52,11 +62,13 @@ const Game = {
     this.blanks = this.currentWord.word
       .toLowerCase()
       .split("")
-      .map(el => (el === " " ? "&nbsp;&nbsp;" : "_"));
+      .map(el => (el === " " ? spacer : "_"));
     blanksEl.innerHTML = this.blanks.join(" ");
+
+    this.displayHint();
   },
 
-  // Display a hint using the game's currently selected word
+  // Display a hint
   displayHint: function() {
     hintEl.innerHTML = this.currentWord.hint;
   },
@@ -92,15 +104,26 @@ const Game = {
         if (this.misses.length === this.totalGuesses) {
           statusEl.textContent = "You lose! Refresh to play again.";
         }
-      } else {
-        if (this.blanks.join("") === this.currentWord.word.toLowerCase()) {
-          statusEl.textContent = "You win this round!";
-        }
+      } else if (
+        this.blanks.join("").replace(spacer, "") ===
+        this.currentWord.word.replace(" ", "").toLowerCase()
+      ) {
+        statusEl.textContent = "You win this round!";
+        this.incrementScore();
       }
     }
   },
   incrementScore: function(score) {
-    // If a winning round, increment score by one
+    this.score++;
+    scoreEl.textContent = this.score;
+    this.reset();
+    this.startRound();
+  },
+  reset: function() {
+    this.currentWord = "";
+    this.guesses = [];
+    this.misses = [];
+    this.blanks = [];
   }
 };
 
@@ -114,6 +137,5 @@ document.onkeyup = e => {
 
 // Start game on page load
 window.onload = () => {
-  Game.pickRandomWord();
-  Game.displayHint();
+  Game.startRound();
 };

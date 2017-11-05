@@ -9,6 +9,8 @@ var blanksEl = document.querySelector("#blanks"),
     statusEl = document.querySelector("#status"),
     manEl = document.querySelector("#man");
 
+var spacer = "&nbsp;&nbsp;";
+
 var asciiHangman = ["<p>&nbsp;&nbsp;&nbsp;O</p>", "<p>&nbsp;&nbsp;-", "|", "-</p>", "<p>&nbsp;&nbsp;&nbsp;|</p>", "<p>&nbsp;/ ", "&nbsp;\\</p>"];
 
 // Build Hangman game as an object
@@ -23,6 +25,12 @@ var Game = {
   }, {
     word: "Brendan Eich",
     hint: "Person"
+  }, {
+    word: "Honda",
+    hint: "Brand"
+  }, {
+    word: "Big Bend",
+    hint: "Place"
   }],
 
   score: 0,
@@ -32,18 +40,20 @@ var Game = {
   misses: [],
   blanks: [],
 
-  pickRandomWord: function pickRandomWord() {
+  startRound: function startRound() {
     // Pick a random word from the gameWords array and set value as word's object
     this.currentWord = this.gameWords[Math.floor(Math.random() * this.gameWords.length)];
 
     // Split the word so can be used as an array later in game
     this.blanks = this.currentWord.word.toLowerCase().split("").map(function (el) {
-      return el === " " ? "&nbsp;&nbsp;" : "_";
+      return el === " " ? spacer : "_";
     });
     blanksEl.innerHTML = this.blanks.join(" ");
+
+    this.displayHint();
   },
 
-  // Display a hint using the game's currently selected word
+  // Display a hint
   displayHint: function displayHint() {
     hintEl.innerHTML = this.currentWord.hint;
   },
@@ -79,15 +89,23 @@ var Game = {
         if (this.misses.length === this.totalGuesses) {
           statusEl.textContent = "You lose! Refresh to play again.";
         }
-      } else {
-        if (this.blanks.join("") === this.currentWord.word.toLowerCase()) {
-          statusEl.textContent = "You win this round!";
-        }
+      } else if (this.blanks.join("").replace(spacer, "") === this.currentWord.word.replace(" ", "").toLowerCase()) {
+        statusEl.textContent = "You win this round!";
+        this.incrementScore();
       }
     }
   },
   incrementScore: function incrementScore(score) {
-    // If a winning round, increment score by one
+    this.score++;
+    scoreEl.textContent = this.score;
+    this.reset();
+    this.startRound();
+  },
+  reset: function reset() {
+    this.currentWord = "";
+    this.guesses = [];
+    this.misses = [];
+    this.blanks = [];
   }
 };
 
@@ -101,6 +119,5 @@ document.onkeyup = function (e) {
 
 // Start game on page load
 window.onload = function () {
-  Game.pickRandomWord();
-  Game.displayHint();
+  Game.startRound();
 };
