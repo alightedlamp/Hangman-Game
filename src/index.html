@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Hangman</title>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+
+<body>
+  <div class="container" id="app">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 class="title">Hangman</h1>
+      </div>
+      <div class="col-lg-12">
+        <h2>Score: <span id="score"></span></h2>
+      </div>
+    </div>
+    <div class="row" id="game">
+      <div class="col-lg-12">
+        <h3 id="blanks"></h3>
+        <h3>Hint: <span id="hint"></span></h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-lg-6" id="hangman">
+        <h4>Progress:</h4>
+        <div id="man">
+
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-6" id="misses">
+        <h4>Misses:</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <p id="status"></p>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script type="text/javascript" src="./app.js"></script>
+
+</html>

@@ -1,0 +1,42 @@
+/* SETTINGS */
+
+@import '_settings.scss';
+
+/* TOOLS */
+
+@import 'reset.css';
+@import 'bootstrap-reboot.css';
+@import 'bootstrap-grid.css';
+
+/* GENERIC */
+
+* {
+  box-sizing: border-box;
+}
+
+/* ELEMENTS */
+h1, h2, h3, h4, p {
+  font-family: monospace;
+}
+h1 {
+  font-size: 2em;
+}
+h2 {
+  font-size: 1.5em;
+}
+h3 {
+  font-size: 1.25em;
+}
+h4 {
+  font-size: 1.1em;
+}
+
+/* OBJECTS */
+#app {
+  margin: 3em auto 0 auto;
+}
+
+/* COMPONENTS */
+
+
+/* TRUMPS */
