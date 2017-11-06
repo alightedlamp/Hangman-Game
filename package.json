@@ -34,7 +34,9 @@
     "gulp-uglify": "^3.0.0",
     "http": "0.0.0",
     "precss": "^2.0.0",
-    "st": "^1.2.2"
+    "pump": "^1.0.2",
+    "st": "^1.2.2",
+    "webpack-stream": "^4.0.0"
   },
   "dependencies": {
     "gulp-gh-pages": "^0.5.4"

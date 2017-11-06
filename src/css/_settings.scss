@@ -1,0 +1,12 @@
+@font-face {
+  src: url('../fonts/angstridden.ttf');
+  font-family: 'Angst Ridden';
+}
+
+$red: rgb(160, 0, 0);
+
+@mixin bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}

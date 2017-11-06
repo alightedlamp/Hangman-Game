@@ -33,7 +33,7 @@ gulp.task("images", () => {
 
 // Copy HTML to build folder
 gulp.task("copy-html", () => {
-  const htmlmin = requite('gulp-htmlmin');
+  const htmlmin = require('gulp-htmlmin');
   const out = folder.build;
   return gulp
     .src("src/*.html")
@@ -52,12 +52,12 @@ gulp.task("build-css", () => {
   return gulp
     .src(config.sassPattern)
     .pipe(sourcemaps.init())
-    .pipe(postcss([require("precss"), require("autoprefixer")]))
     .pipe(sass())
     .on("error", err => {
       gutil.log(err);
       this.emit("end");
     })
+    .pipe(postcss([require("precss"), require("autoprefixer")]))
     .pipe(config.production ? cleanCSS({ compatibility: "ie8" }) : gutil.noop())
     .pipe(sourcemaps.write())
     .pipe(gulp.dest(out))
@@ -67,24 +67,27 @@ gulp.task("build-css", () => {
 // Transpiles ES6 -> ES5
 gulp.task("build-js", () => {
   const babel = require("gulp-babel");
+  const webpack = require('webpack-stream');
   const uglify = require("gulp-uglify");
   const pump = require("pump");
+  const input = `${folder.source}/${config.entry}`;
   const out = folder.build;
   return gulp
-    .src(`${folder.source}/${config.entry}`)
+    .src(input)
     .pipe(
       babel({
         presets: ["env"]
       })
     )
-    .on("error", err => {
+    .on("error", function(err) {
       gutil.log(err);
       this.emit("end");
     })
+    .pipe(webpack(require('./webpack.config.js')))
     .pipe(
       config.production
-        ? pump([gulp.src("src/*.js"), uglify(), gulp.dest(out)], cb)
-        : gutil.noop()
+      ? pump([gulp.src("src/*.js"), uglify(), gulp.dest(out)], cb)
+      : gutil.noop()
     )
     .pipe(gulp.dest(out))
     .pipe(livereload());
