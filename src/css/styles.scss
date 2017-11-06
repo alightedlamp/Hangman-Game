@@ -19,8 +19,8 @@ html,
 body {
   background: url('../img/night_bg.jpg');
   background-color: black;
-  background-repeat: repeat-y;
   @include bg;
+  background-repeat: repeat-y;
 }
 header {
   height: 500px;
@@ -28,9 +28,13 @@ header {
   @include bg;
 }
 
-h1, h2, h3, h4, p {
+h1,
+h2,
+h3,
+h4,
+p {
   font-family: monospace;
-  text-align: center; 
+  text-align: center;
 }
 h1 {
   font-size: 2em;
@@ -52,7 +56,7 @@ h4 {
 #app {
   width: 768px;
   padding: 2em;
-  margin: 0 auto 75px auto;
+  margin: -100px auto 75px auto;
   border-top: 10px double $red;
 
   color: rgb(117, 117, 117);
@@ -64,15 +68,13 @@ div.row {
 
 footer {
   height: 75px;
-  display: flex;
-  align-content: center;
-  justify-content: center;
+  margin-bottom: 75px;
 }
 
 /* COMPONENTS */
 h3#blanks {
   margin: 1.5em 0;
-  font-size: 2em;
+  font-size: 2.5em;
   text-align: center;
   color: $red;
 }
@@ -88,15 +90,46 @@ h3#blanks {
 #game-container {
   padding: 1em;
   margin-top: 75px;
-  background: rgba(8, 13, 22, .8);
+  background: rgba(8, 13, 22, 0.8);
   border: 1px solid rgb(59, 0, 0);
   box-shadow: 3px 3px 10px darken($red, 15%);
 }
 #main-game {
-  height: 200px;
-
+  height: 250px;
+  font-size: 1.5em;
+}
+#status-container {
+  height: 25px;
+  font-size: 1.75em;
 }
 
+ul.nav-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style-type: none;
+}
+ul li {
+  text-align: center;
+}
+.links svg,
+.links a {
+  display: block;
+}
+.links {
+  svg {
+    fill: $red;
+    height: 50px;
+    width: 50px;
+    transition: 1s;
+    &:hover {
+      fill: rgb(219, 219, 219);
+    }
+  }
+  li {
+    margin: 5px;
+  }
+}
 
 /* TRUMPS */
 .red {

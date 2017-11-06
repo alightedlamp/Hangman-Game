@@ -6,7 +6,7 @@
 $red: rgb(160, 0, 0);
 
 @mixin bg {
-  background-size: cover;
+  background-size: 100%;
   background-position: center;
   background-repeat: no-repeat;
 }
