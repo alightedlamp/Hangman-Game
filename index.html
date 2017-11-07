@@ -24,7 +24,7 @@
         <div class="col-md-6 col-lg-6" id="hangman">
           <h4>Progress:</h4>
           <div id="man">
-
+            <!-- <img src="./img/demogorgon.png" /> -->
           </div>
         </div>
         <div class="col-md-6 col-lg-6">
@@ -37,10 +37,20 @@
           <p id="status">Press any key to get started!</p>
         </div>
       </div>
-      <div class="row">
-        <div class="col-lg-12">
-          <h3 class="red-light">Score:
-            <span id="score"></span>
+      <div class="row" id="scoreboard">
+        <div class="col-lg-4">
+          <h3 class="red-light">Wins:
+            <span id="wins">0</span>
+          </h3>
+        </div>
+        <div class="col-lg-4">
+          <h3 class="red-light">Losses:
+            <span id="losses">0</span>
+          </h3>
+        </div>
+        <div class="col-lg-4">
+          <h3 class="red-light">Guesses:
+            <span id="guesses-remaining"></span>
           </h3>
         </div>
       </div>
