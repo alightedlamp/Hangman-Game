@@ -77,11 +77,14 @@ const blanksEl = document.querySelector('#blanks'),
   hintEl = document.querySelector('#hint'),
   hangmanEl = document.querySelector('#hangman'),
   missesEl = document.querySelector('#misses'),
-  scoreEl = document.querySelector('#score'),
+  winsEl = document.querySelector('#wins'),
+  lossesEl = document.querySelector('#losses'),
   statusEl = document.querySelector('#status'),
+  guessesRemainingEl = document.querySelector('#guesses-remaining'),
   manEl = document.querySelector('#man');
 
 const spacer = '&nbsp;&nbsp;';
+const re = /([,\-\'\s])|((&nbsp;){2})/g;
 
 const asciiHangman = [
   '<p>&nbsp;&nbsp;&nbsp;O</p>',
@@ -97,9 +100,11 @@ const Game = {
   // Data array containing words and hints for each word
   gameData: __WEBPACK_IMPORTED_MODULE_0__data__["a" /* gameData */],
 
+  // Initialize game state
   score: 0,
   totalGuesses: asciiHangman.length,
   currentWord: '',
+  wordsPlayed: [],
   guesses: [],
   misses: [],
   blanks: [],
@@ -110,20 +115,33 @@ const Game = {
       // Reset hangman to empty string
       manEl.innerHTML = '';
       missesEl.innerHTML = '';
+      guessesRemainingEl.innerHTML = this.totalGuesses;
     }
 
     // Pick a random word from the gameData array and set value as word's object
-    this.currentWord = this.gameData[
-      Math.floor(Math.random() * this.gameData.length)
-    ];
+    this.currentWord = this.pickNewWord();
+    while (this.wordsPlayed.indexOf(this.currentWord.word) !== -1) {
+      this.currentWord = this.pickNewWord();
+    }
+    this.wordsPlayed.push(this.currentWord.word);
 
     // Set up the current round's blank letters and add to page
-    this.blanks = this.currentWord.word
-      .split('')
-      .map(el => (el === ' ' ? spacer : '_'));
+    this.blanks = this.currentWord.word.split('').map(el => {
+      if (el === ' ') {
+        return spacer;
+      } else if (el.match(re)) {
+        return el;
+      } else {
+        return '_';
+      }
+    });
     blanksEl.innerHTML = this.blanks.join(' ');
 
     this.displayHint();
+  },
+
+  pickNewWord: function() {
+    return this.gameData[Math.floor(Math.random() * this.gameData.length)];
   },
 
   // Displays `hint` property from current word object
@@ -133,24 +151,26 @@ const Game = {
 
   checkGuess: function(guess) {
     // Reset the status text
-    statusEl.textContent = '';
+    statusEl.innerHTML = '';
 
-    // Make guess uppercase to match case of dispaly
+    // Make guess uppercase to match case of display
     guess = guess.toUpperCase();
 
     // If the selected letter has already been chosen, update status text to warn player
     if (this.guesses.indexOf(guess) !== -1) {
-      statusEl.textContent = 'Already chosen, pick again';
+      statusEl.innerHTML = 'Already chosen, pick again';
     } else {
       this.guesses.push(guess);
 
+      // Initialize values for checking player's guess
       let i = 0;
       let found = false;
+      let currentWord = this.currentWord.word.toUpperCase();
+      let testCase = currentWord.indexOf(guess, i);
 
-      while (this.currentWord.word.toUpperCase().indexOf(guess, i) !== -1) {
+      while (testCase !== -1) {
         // Replace index at blanks array with guessed letter if found in current word
-        let answer = this.currentWord.word.toUpperCase().indexOf(guess, i);
-        this.blanks[answer] = guess;
+        this.blanks[testCase] = guess;
 
         // Update blanks element on page
         blanksEl.innerHTML = this.blanks.join(' ');
@@ -158,16 +178,18 @@ const Game = {
         // Set found as true to check game progress below
         found = true;
         i++;
+
+        // Update test case with new index
+        testCase = currentWord.indexOf(guess, i);
       }
 
       if (!found) {
         // If letter is not found, add to misses array and output to page
         this.misses.push(guess);
 
-        // Update missed letters section
+        // Update game state
         missesEl.innerHTML = this.misses.join(' ');
-
-        // Update hangman image
+        guessesRemainingEl.innerHTML = this.totalGuesses - this.misses.length;
         manEl.innerHTML = asciiHangman.slice(0, this.misses.length).join('');
 
         // If total number of misses is equals number of total chances, the round is over
@@ -179,8 +201,8 @@ const Game = {
 
         // Check if blanks string is equal to current word, indicating winning round
       } else if (
-        this.blanks.join('').replace(spacer, '') ===
-        this.currentWord.word.replace(' ', '').toUpperCase()
+        this.blanks.join('').replace(re, '') ===
+        this.currentWord.word.replace(re, '').toUpperCase()
       ) {
         this.showWinningState();
         this.incrementScore();
@@ -190,16 +212,17 @@ const Game = {
 
   // Utility functions for moving game progress forward
   showWinningState: function() {
-    statusEl.textContent = 'You won! Here is another.';
+    statusEl.innerHTML = 'You won! Here is another.';
   },
   incrementScore: function(score) {
     this.score++;
-    scoreEl.textContent = this.score;
+    winsEl.innerHTML = this.score;
     this.reset();
     this.startRound();
   },
   showLosingState: function() {
-    statusEl.textContent = 'You lose! Better luck next time.';
+    lossesEl.innerHTML = this.score - this.wordsPlayed.length;
+    statusEl.innerHTML = 'You lose! Better luck next time.';
   },
   reset: function() {
     this.currentWord = '';
@@ -214,7 +237,7 @@ document.onkeyup = e => {
   if (e.keyCode >= 65 && e.keyCode <= 90) {
     Game.checkGuess(e.key);
   } else {
-    statusEl.textContent = 'Choose a letter, please!';
+    statusEl.innerHTML = 'Choose a letter, please!';
   }
 };
 
