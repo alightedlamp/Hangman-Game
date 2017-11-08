@@ -4,6 +4,9 @@
 }
 
 $red: rgb(160, 0, 0);
+$skyblue: rgb(50, 84, 122);
+$skyblueDark: rgba(8, 13, 22, 0.8);
+$gray: rgb(117, 117, 117);
 
 @mixin bg {
   background-size: 100%;

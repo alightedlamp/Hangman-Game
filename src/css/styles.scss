@@ -14,7 +14,9 @@
   box-sizing: border-box;
 }
 
+
 /* ELEMENTS */
+
 html,
 body {
   background: url('../img/night_bg.jpg');
@@ -22,6 +24,7 @@ body {
   @include bg;
   background-repeat: repeat-y;
 }
+
 header {
   height: 500px;
   background: url('../img/stranger-hangman.png');
@@ -36,30 +39,48 @@ p {
   font-family: monospace;
   text-align: center;
 }
+
 h1 {
   font-size: 2em;
 }
+
 h2 {
   font-size: 1.75em;
 }
+
 h3 {
   font-size: 1.6em;
   text-shadow: 1px 2px 5px lighten($red, 10%);
 }
+
 h4 {
   font-size: 1.4em;
-  color: rgb(255, 0, 0);
+  color: lighten($red, 20%);
   text-shadow: 3px 3px 5px lighten($red, 10%);
 }
 
+p {
+  color: $gray;
+}
+
+a:link,
+a:active,
+a:visited {
+  color: $skyblue;
+}
+
+a:hover {
+  color: lighten($skyblue, 20%);
+}
+
+
 /* OBJECTS */
+
 #app {
   width: 768px;
   padding: 2em;
   margin: -100px auto 75px auto;
   border-top: 10px double $red;
-
-  color: rgb(117, 117, 117);
 }
 
 div.row {
@@ -71,42 +92,52 @@ footer {
   margin-bottom: 75px;
 }
 
+
 /* COMPONENTS */
+
 h3#blanks {
   margin: 1.5em 0;
   font-size: 2.5em;
   text-align: center;
   color: $red;
 }
+
 #game h4 {
   text-align: center;
 }
-#status {
-  color: #eee;
-}
+
 #hangman {
   border-right: 10px double darken($red, 10%);
 }
+
 #game-container {
   padding: 1em;
   margin-top: 75px;
-  background: rgba(8, 13, 22, 0.8);
+  background: $skyblueDark;
   border: 1px solid rgb(59, 0, 0);
   box-shadow: 3px 3px 10px darken($red, 15%);
 }
+
 #main-game {
   height: 250px;
   font-size: 1.5em;
 }
+
 #misses {
   font-family: 'Something Strange';
   font-size: 2em;
-  color: white;
+  color: lighten($skyblueDark, 30%);
   letter-spacing: 10px;
+  padding: 20px;
 }
+
 #status-container {
-  height: 25px;
+  min-height: 25px;
   font-size: 1.75em;
+}
+
+#status {
+  color: lighten($gray, 20%);
 }
 
 ul.nav-list {
@@ -115,13 +146,16 @@ ul.nav-list {
   align-items: center;
   list-style-type: none;
 }
+
 ul li {
   text-align: center;
 }
+
 .links svg,
 .links a {
   display: block;
 }
+
 .links {
   svg {
     fill: $red;
@@ -137,16 +171,21 @@ ul li {
   }
 }
 
+
 /* TRUMPS */
+
 .red {
   color: $red;
 }
+
 .red-dark {
   color: dark($red, 30%);
 }
+
 .red-light {
   color: lighten($red, 30%);
 }
+
 .no-shadow {
   text-shadow: none !important;
 }
