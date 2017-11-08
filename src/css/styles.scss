@@ -106,10 +106,6 @@ h3#blanks {
   text-align: center;
 }
 
-#hangman {
-  border-right: 10px double darken($red, 10%);
-}
-
 #game-container {
   padding: 1em;
   margin-top: 75px;
@@ -118,21 +114,33 @@ h3#blanks {
   box-shadow: 3px 3px 10px darken($red, 15%);
 }
 
+#hangman {
+  border-right: 10px double darken($red, 10%);
+}
+
+#man {
+  padding: 30px;
+}
+
+#man img {
+  max-width: 100%;
+}
+
 #main-game {
-  height: 250px;
+  height: 400px;
   font-size: 1.5em;
 }
 
 #misses {
   font-family: 'Something Strange';
   font-size: 2em;
-  color: lighten($skyblueDark, 30%);
+  color: lighten($gray, 20%);
   letter-spacing: 10px;
   padding: 20px;
 }
 
 #status-container {
-  min-height: 25px;
+  height: 50px;
   font-size: 1.75em;
 }
 

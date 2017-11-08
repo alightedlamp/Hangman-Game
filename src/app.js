@@ -1,5 +1,5 @@
 import { gameData } from './js/data';
-// import { hangman } from './js/hangman';
+import { hangman } from './js/hangman';
 
 // Define elements to be used in the game as global variables
 const blanksEl = document.querySelector('#blanks'),
@@ -15,18 +15,7 @@ const blanksEl = document.querySelector('#blanks'),
 const spacer = '&nbsp;&nbsp;';
 const re = /([,\-\'\s])|((&nbsp;){2})/g;
 
-const hangman = [
-  '<p>&nbsp;&nbsp;&nbsp;O</p>',
-  '<p>&nbsp;&nbsp;-',
-  '|',
-  '-</p>',
-  '<p>&nbsp;&nbsp;&nbsp;|</p>',
-  '<p>&nbsp;/ ',
-  '&nbsp;\\</p>'
-];
-
 const Game = {
-  // Data array containing words and hints for each word
   gameData: gameData,
 
   // Initialize game state
@@ -40,10 +29,11 @@ const Game = {
   blanks: [],
 
   startRound: function() {
-    // Pick a random word from data, ensuring has not already been played
+    // Only set currentWord here if very first execution of function
     if (this.currentWord === '') {
       this.currentWord = this.pickNewWord();
     }
+    // Pick a random word from data, ensuring has not already been played
     while (this.wordsPlayed.indexOf(this.currentWord.word) !== -1) {
       this.currentWord = this.pickNewWord();
     }
@@ -59,7 +49,7 @@ const Game = {
       if (el === ' ') {
         return spacer;
       } else if (el.match(re)) {
-        return el;
+        return el; // Keeps dashes, apostrophes, and commas
       } else {
         return '_';
       }
@@ -105,8 +95,6 @@ const Game = {
     while (testCase !== -1) {
       // Replace index at blanks array with guessed letter if found in current word
       this.blanks[testCase] = guess;
-
-      // Update blanks element on page
       blanksEl.innerHTML = this.blanks.join(' ');
 
       // Set found as true to check game progress below
@@ -125,9 +113,14 @@ const Game = {
     // Update game state
     missesEl.innerHTML = this.misses.join(' ');
     guessesRemainingEl.innerHTML = this.totalGuesses - this.misses.length;
-    manEl.innerHTML = hangman.slice(0, this.misses.length).join('');
+    manEl.innerHTML = `
+      <img 
+        src="${hangman[this.misses.length - 1]}"
+        alt="Hangman miss ${this.misses.length}"
+      />
+    `;
 
-    // If total number of misses is equals number of total chances, the round is over
+    // Check if there are any guesses left
     if (this.misses.length === this.totalGuesses) {
       this.decrementScore();
     }
@@ -171,16 +164,11 @@ const Game = {
   }
 };
 
-// Listen for keyboard events and validate input
+// Listen for keyboard events and validate input, perhaps too cleverly
 document.onkeyup = e => {
-  if (e.keyCode >= 65 && e.keyCode <= 90) {
-    Game.checkGuess(e.key);
-  } else {
-    statusEl.innerHTML = 'Choose a letter, please!';
-  }
+  e.keyCode >= 65 && e.keyCode <= 90
+    ? Game.checkGuess(e.key)
+    : (statusEl.innerHTML = 'Choose a letter, please!');
 };
-
-// Start game on page load
-window.onload = () => {
-  Game.startRound();
-};
+// Start game when DOM loaded -> this is equivalent of jQuery's document.ready
+document.addEventListener('DOMContentLoaded', () => Game.startRound());
