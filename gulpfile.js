@@ -78,19 +78,16 @@ gulp.task('build-js', () => {
   const out = folder.build;
   return gulp
     .src(input)
+    .pipe(webpack(require('./webpack.config.js')))
+    .on('error', handleError)
     .pipe(
       babel({
         presets: ['env']
       })
     )
     .on('error', handleError)
-    .pipe(webpack(require('./webpack.config.js')))
-    .on('error', handleError)
-    .pipe(
-      config.production
-        ? pump([gulp.src('src/*.js'), uglify(), gulp.dest(out)], cb)
-        : gutil.noop()
-    )
+    .pipe(config.production ? uglify() : gutil.noop())
+    .on('error', gutil.log)
     .pipe(gulp.dest(out))
     .pipe(livereload());
 });

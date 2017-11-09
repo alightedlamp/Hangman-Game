@@ -15,6 +15,24 @@ const blanksEl = document.querySelector('#blanks'),
 const spacer = '&nbsp;&nbsp;';
 const re = /([,\-\'\s])|((&nbsp;){2})/g;
 
+const preloadImages = () => {
+  let images = new Array();
+  function preload() {
+    Array.prototype.slice.call(arguments).map((img, i) => {
+      images[i] = new Image();
+      images[i].src = img;
+    });
+  }
+  preload(
+    '../img/miss1.png',
+    '../img/miss2.png',
+    '../img/miss3.png',
+    '../img/miss4.png',
+    '../img/miss5.png',
+    '../img/miss6.png'
+  );
+};
+
 const Game = {
   gameData: gameData,
 
@@ -58,8 +76,15 @@ const Game = {
   },
 
   checkGuess: function(guess) {
-    // Reset the status text
+    // Reset the status on new guess
     statusEl.innerHTML = '';
+
+    // Reset game state on new round
+    if (this.misses.length === 0) {
+      manEl.innerHTML = '';
+      missesEl.innerHTML = '';
+      guessesRemainingEl.innerHTML = this.totalGuesses;
+    }
 
     // Make guess uppercase to match case of display
     guess = guess.toUpperCase();
@@ -136,6 +161,8 @@ const Game = {
   incrementScore: function(score) {
     this.wins++;
     winsEl.innerHTML = this.wins;
+    manEl.innerHTML = '';
+    missesEl.innerHTML = '';
     statusEl.innerHTML = 'You won! Here is another.';
     this.reset();
   },
@@ -152,10 +179,6 @@ const Game = {
     this.misses = [];
     this.blanks = [];
 
-    manEl.innerHTML = '';
-    missesEl.innerHTML = '';
-    guessesRemainingEl.innerHTML = this.totalGuesses;
-
     if (this.wins + this.losses === this.gameData.length) {
       statusEl.innerHTML = 'There are no more words to play!';
     } else {
@@ -170,5 +193,11 @@ document.onkeyup = e => {
     ? Game.checkGuess(e.key)
     : (statusEl.innerHTML = 'Choose a letter, please!');
 };
+
+// Prepare images
+preloadImages();
+
 // Start game when DOM loaded -> this is equivalent of jQuery's document.ready
-document.addEventListener('DOMContentLoaded', () => Game.startRound());
+document.addEventListener('DOMContentLoaded', () => {
+  Game.startRound();
+});
