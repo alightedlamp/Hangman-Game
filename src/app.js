@@ -24,12 +24,12 @@ const preloadImages = () => {
     });
   }
   preload(
-    'img/miss1.png',
-    'img/miss2.png',
-    'img/miss3.png',
-    'img/miss4.png',
-    'img/miss5.png',
-    'img/miss6.png'
+    './img/miss1.png',
+    './img/miss2.png',
+    './img/miss3.png',
+    './img/miss4.png',
+    './img/miss5.png',
+    './img/miss6.png'
   );
 };
 
@@ -49,6 +49,7 @@ const Game = {
   startRound: function() {
     // Only set currentWord here if very first execution of function
     if (this.currentWord === '') {
+      guessesRemainingEl.innerHTML = this.totalGuesses;
       this.currentWord = this.pickNewWord();
     }
     // Pick a random word from data, ensuring has not already been played
@@ -161,8 +162,11 @@ const Game = {
   incrementScore: function(score) {
     this.wins++;
     winsEl.innerHTML = this.wins;
+
+    // Reset the board immediately if a winning round
     manEl.innerHTML = '';
     missesEl.innerHTML = '';
+    guessesRemainingEl.innerHTML = this.totalGuesses;
     statusEl.innerHTML = 'You won! Here is another.';
     this.reset();
   },
