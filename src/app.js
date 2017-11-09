@@ -167,7 +167,8 @@ const Game = {
     manEl.innerHTML = '';
     missesEl.innerHTML = '';
     guessesRemainingEl.innerHTML = this.totalGuesses;
-    statusEl.innerHTML = 'You won! Here is another.';
+    statusEl.innerHTML = `&rsquo;${this.currentWord
+      .word}&rsquo; is correct! Here is another.`;
     this.reset();
   },
   decrementScore: function() {
