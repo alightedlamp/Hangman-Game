@@ -8,7 +8,7 @@ export const gameData = [
     hint: 'Thing'
   },
   {
-    word: 'Cheif Jim Hopper',
+    word: 'Chief Jim Hopper',
     hint: 'Person'
   },
   {
